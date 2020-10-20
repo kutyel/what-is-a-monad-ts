@@ -67,10 +67,10 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 90,
-        "functions": 95,
-        "lines": 95,
-        "statements": 95
+        "branches": 57,
+        "functions": 70,
+        "lines": 100,
+        "statements": 87
       }
     },
     "collectCoverageFrom": [
@@ -96,8 +96,9 @@
     "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
     "cz-conventional-changelog": "^2.1.0",
-    "fast-check": "^1.16.0",
+    "fast-check": "^2.5.0",
     "fp-ts-laws": "^0.2.1",
+    "handlebars": "4.5.0",
     "husky": "^1.0.1",
     "jest": "^23.6.0",
     "jest-config": "^23.6.0",
