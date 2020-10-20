@@ -1,23 +1,25 @@
+// typeclasses
 import { Eq } from 'fp-ts/lib/Eq'
 import { Applicative1 } from 'fp-ts/lib/Applicative'
 import { Monad1 } from 'fp-ts/lib/Monad'
+
 // property-tests
-import { Arbitrary, constant /* FIXME: , oneof */ } from 'fast-check'
+import { Arbitrary, constant, oneof } from 'fast-check'
 
 // TODO: why I cannot call this "Maybe"?? 😭
-export const URI = 'Option'
-export type URI = typeof URI
+const URI = 'Option'
+type URI = typeof URI
 
-export interface Nothing {
+interface Nothing {
   readonly _tag: 'None'
 }
 
-export interface Just<A> {
+interface Just<A> {
   readonly _tag: 'Some'
   readonly value: A
 }
 
-export type Maybe<A> = Nothing | Just<A>
+type Maybe<A> = Nothing | Just<A>
 
 /**
  * The `Monad` type class combines the operations of the `Chain` and
@@ -34,24 +36,25 @@ export type Maybe<A> = Nothing | Just<A>
  *
  */
 
-export const isJust = <A>(fa: Maybe<A>): fa is Just<A> => fa._tag === 'Some'
-export const isNothing = <A>(fa: Maybe<A>): fa is Nothing => fa._tag === 'None'
+// @ts-ignore
+const isJust = <A>(fa: Maybe<A>): fa is Just<A> => fa._tag === 'Some'
+const isNothing = <A>(fa: Maybe<A>): fa is Nothing => fa._tag === 'None'
 
 // construtors
 
-export const nothing: Maybe<never> = { _tag: 'None' }
-export const just = <A>(a: A): Maybe<A> => ({ _tag: 'Some', value: a })
+const nothing: Maybe<never> = { _tag: 'None' }
+const just = <A>(a: A): Maybe<A> => ({ _tag: 'Some', value: a })
 
 // operations
 
-export const of: Applicative1<URI>['of'] = just
+const of: Applicative1<URI>['of'] = just
 
-export const map: Monad1<URI>['map'] = (fa, f) => (isNothing(fa) ? nothing : just(f(fa.value)))
+const map: Monad1<URI>['map'] = (fa, f) => (isNothing(fa) ? nothing : just(f(fa.value)))
 
-export const ap: Monad1<URI>['ap'] = (fab, fa) =>
+const ap: Monad1<URI>['ap'] = (fab, fa) =>
   isNothing(fab) ? nothing : isNothing(fa) ? nothing : just(fab.value(fa.value))
 
-export const chain: Monad1<URI>['chain'] = (ma, f) => (isNothing(ma) ? nothing : f(ma.value))
+const chain: Monad1<URI>['chain'] = (ma, f) => (isNothing(ma) ? nothing : f(ma.value))
 
 // needed for tests
 
@@ -60,15 +63,13 @@ export const getEq = <A>(E: Eq<A>): Eq<Maybe<A>> => ({
     x === y || (isNothing(x) ? isNothing(y) : isNothing(y) ? false : E.equals(x.value, y.value))
 })
 
+export const getOption = <A>(arb: Arbitrary<A>) => oneof(getNothing(), getJust(arb))
+
 // instances of Arbitrary for fast-check
 
-export const getJust = <A>(arb: Arbitrary<A>): Arbitrary<Maybe<A>> => arb.map(just)
+const getJust = <A>(arb: Arbitrary<A>): Arbitrary<Maybe<A>> => arb.map(just)
 
-export const getNothing = <A>(): Arbitrary<Maybe<A>> => constant(nothing)
-
-// FIXME: why this does not work?
-// export const getOption = <A>(arb: Arbitrary<A>): Arbitrary<Maybe<A>> =>
-//   oneof(getNothing(), getJust(arb))
+const getNothing = <A>(): Arbitrary<Maybe<A>> => constant(nothing)
 
 // minimal Monad implementation
 
