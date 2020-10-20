@@ -63,7 +63,7 @@ const chain: Monad1<URI>['chain'] = (ma, f) => (isNothing(ma) ? nothing : f(ma.v
 
 // needed for tests
 
-export const getEq = <A>(E: Eq<A>): Eq<Maybe<A>> => ({
+export const getEqMaybe = <A>(E: Eq<A>): Eq<Maybe<A>> => ({
   equals: (x, y) =>
     x === y || (isNothing(x) ? isNothing(y) : isNothing(y) ? false : E.equals(x.value, y.value))
 })
