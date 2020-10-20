@@ -77,11 +77,4 @@ const getJust = <A>(arb: Arbitrary<A>): Arbitrary<Maybe<A>> => arb.map(just)
 const getNothing = <A>(): Arbitrary<Maybe<A>> => constant(nothing)
 
 // minimal Monad implementation
-
-export const maybe: Monad1<URI> = {
-  URI,
-  map,
-  of,
-  ap,
-  chain
-}
+export const maybe: Monad1<URI> = { URI, map, of, ap, chain }
