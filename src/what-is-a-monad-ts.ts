@@ -68,8 +68,7 @@ export const getEq = <A>(E: Eq<A>): Eq<Maybe<A>> => ({
     x === y || (isNothing(x) ? isNothing(y) : isNothing(y) ? false : E.equals(x.value, y.value))
 })
 
-export const getMaybe = <A>(arb: Arbitrary<A>): Arbitrary<Maybe<A>> =>
-  oneof(getNothing<A>(), getJust(arb))
+export const getMaybe = <A>(arb: Arbitrary<A>) => oneof(getNothing<A>(), getJust(arb))
 
 // instances of Arbitrary for fast-check
 
