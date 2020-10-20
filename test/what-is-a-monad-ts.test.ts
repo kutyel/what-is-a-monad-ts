@@ -1,16 +1,14 @@
 import { applicative, functor, monad } from 'fp-ts-laws'
 
-import { maybe, getEq, getOption } from '../src/what-is-a-monad-ts'
+import { maybe, getEq, getMaybe } from '../src/what-is-a-monad-ts'
 
 describe('My custom Monad', () => {
-  // FIXME: 'getOption' should work
   it('should test Functor laws', () => {
-    functor(maybe)(getOption, getEq)
+    functor(maybe)(getMaybe, getEq)
   })
 
-  // FIXME: 'getOption' should work
   it('should test Applicative laws', () => {
-    applicative(maybe)(getOption, getEq)
+    applicative(maybe)(getMaybe, getEq)
   })
 
   it('should test Monad laws', () => {

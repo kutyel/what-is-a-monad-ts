@@ -6,20 +6,25 @@ import { Monad1 } from 'fp-ts/lib/Monad'
 // property-tests
 import { Arbitrary, constant, oneof } from 'fast-check'
 
-// TODO: why I cannot call this "Maybe"?? 😭
-const URI = 'Option'
+const URI = 'Maybe'
 type URI = typeof URI
 
 interface Nothing {
-  readonly _tag: 'None'
+  readonly _tag: 'Nothing'
 }
 
 interface Just<A> {
-  readonly _tag: 'Some'
+  readonly _tag: 'Just'
   readonly value: A
 }
 
 type Maybe<A> = Nothing | Just<A>
+
+declare module 'fp-ts/lib/HKT' {
+  interface URItoKind<A> {
+    readonly [URI]: Maybe<A>
+  }
+}
 
 /**
  * The `Monad` type class combines the operations of the `Chain` and
@@ -37,13 +42,13 @@ type Maybe<A> = Nothing | Just<A>
  */
 
 // @ts-ignore
-const isJust = <A>(fa: Maybe<A>): fa is Just<A> => fa._tag === 'Some'
-const isNothing = <A>(fa: Maybe<A>): fa is Nothing => fa._tag === 'None'
+const isJust = <A>(fa: Maybe<A>): fa is Just<A> => fa._tag === 'Just'
+const isNothing = <A>(fa: Maybe<A>): fa is Nothing => fa._tag === 'Nothing'
 
 // construtors
 
-const nothing: Maybe<never> = { _tag: 'None' }
-const just = <A>(a: A): Maybe<A> => ({ _tag: 'Some', value: a })
+export const nothing: Maybe<never> = { _tag: 'Nothing' }
+export const just = <A>(a: A): Maybe<A> => ({ _tag: 'Just', value: a })
 
 // operations
 
@@ -63,7 +68,7 @@ export const getEq = <A>(E: Eq<A>): Eq<Maybe<A>> => ({
     x === y || (isNothing(x) ? isNothing(y) : isNothing(y) ? false : E.equals(x.value, y.value))
 })
 
-export const getOption = <A>(arb: Arbitrary<A>) => oneof(getNothing(), getJust(arb))
+export const getMaybe = <A>(arb: Arbitrary<A>) => oneof(getNothing<A>(), getJust(arb))
 
 // instances of Arbitrary for fast-check
 
