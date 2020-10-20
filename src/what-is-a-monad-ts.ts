@@ -62,13 +62,13 @@ export const getEq = <A>(E: Eq<A>): Eq<Maybe<A>> => ({
 
 // instances of Arbitrary for fast-check
 
-export const getSome = <A>(arb: Arbitrary<A>): Arbitrary<Maybe<A>> => arb.map(just)
+export const getJust = <A>(arb: Arbitrary<A>): Arbitrary<Maybe<A>> => arb.map(just)
 
-export const getNone = <A>(): Arbitrary<Maybe<A>> => constant(nothing)
+export const getNothing = <A>(): Arbitrary<Maybe<A>> => constant(nothing)
 
 // FIXME: why this does not work?
 // export const getOption = <A>(arb: Arbitrary<A>): Arbitrary<Maybe<A>> =>
-//   oneof(getNone(), getSome(arb))
+//   oneof(getNothing(), getJust(arb))
 
 // minimal Monad implementation
 
